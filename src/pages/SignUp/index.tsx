@@ -8,7 +8,8 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../hooks/AuthContext';
+import { Link } from 'react-router-dom';
 
 interface SignInFormData {
   nome:string;
@@ -43,10 +44,6 @@ const SignUp: React.FC = () => {
           });
         } catch(err) {
             console.log(err);
-            
-            // const errors = getValidationErrors(err);
-    
-            // formRef.current?.setErrors(errors);
         }
       },[signUp]);
 
@@ -67,11 +64,10 @@ const SignUp: React.FC = () => {
                     <Button type='submit'>Cadastrar</Button>
                 </Form>
     
-                <a href="login" placeholder='criar conta'>
+                <Link to="/login" placeholder='criar conta'>
                     <FiArrowLeft/>
                         Voltar para logon
-                    {/* </FiLogIn> */}
-                </a>
+                </Link>
             </Content>
         </Container>
         );

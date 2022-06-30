@@ -10,7 +10,9 @@ import { FormHandles } from '@unform/core';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../hooks/AuthContext';
+import { Link } from 'react-router-dom';
+
 
 interface SignInFormData {
   email: string;
@@ -42,10 +44,6 @@ async (data: SignInFormData) => {
           });
         } catch(err) {
             console.log(err);
-            
-            // const errors = getValidationErrors(err);
-    
-            // formRef.current?.setErrors(errors);
         }
       },[signIn])
 
@@ -66,11 +64,10 @@ async (data: SignInFormData) => {
                     <a href='forgot'>Esqueci minha senha</a>
                 </Form>
     
-                <a href="login" placeholder='criar conta'>
+                <Link to="/signup" placeholder='criar conta'>
                     <FiLogIn/>
                         Criar conta
-                    {/* </FiLogIn> */}
-                </a>
+                </Link>
             </Content>
             <Background/>
         </Container>
