@@ -1,16 +1,16 @@
-import React, {useRef, useCallback, useContext} from 'react';
-import { Container, Content, Background } from './styles';
+import React, {useRef, useCallback} from 'react';
+import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/logo-senac.png';
 
 import * as Yup from 'yup';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
-
+import { keyframes } from 'styled-components';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-
+import { useToast } from '../../hooks/toast';
+import { useAuth } from '../../hooks/auth';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { AuthContext } from '../../hooks/AuthContext';
 import { Link } from 'react-router-dom';
 
 
@@ -21,8 +21,10 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
-    const { signIn } = useContext(AuthContext)
-
+    const { instrutor, signIn } = useAuth();
+    console.log(instrutor);
+    
+    const { addToast } = useToast();
     const handleSubmit = useCallback(
 async (data: SignInFormData) => {
         console.log(data);
@@ -38,36 +40,50 @@ async (data: SignInFormData) => {
           await schema.validate(data, {
             abortEarly: false,
           });
-          signIn({
+          await signIn({
             email: data.email,
             senha: data.senha,
           });
+          addToast({
+            type: 'success',
+            title: 'Login realizado com successo',
+            description: '',
+          });
         } catch(err) {
             console.log(err);
-        }
-      },[signIn])
+            addToast({
+              type: 'error',
+              title: 'Erro na authenticação',
+              description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
+            });
+          }
+      },
+      [signIn, addToast]
+    );
 
     return (
-        <Container>
+        <Container> 
             <Content>
-                <img src={logoImg} alt='Logo senac' />
-    
+            <AnimationContainer>
+              <img src={logoImg} alt='Logo senac' />
                 <Form onSubmit={handleSubmit}>
                     <h1>Faça seu logon</h1>
-    
+
                     <Input name = 'email' icon={FiMail} type='email' placeholder='E-mail' />
-    
+
                     <Input name = 'senha' icon={FiLock} type='password' placeholder='Senha' />
-    
+
                     <Button type='submit'>Entrar</Button>
-    
+
                     <a href='forgot'>Esqueci minha senha</a>
                 </Form>
-    
-                <Link to="/signup" placeholder='criar conta'>
-                    <FiLogIn/>
-                        Criar conta
-                </Link>
+
+              <Link to="/signup" placeholder='criar conta'>
+                  <FiLogIn/>
+                      Criar conta
+              </Link>
+            </AnimationContainer>
+                
             </Content>
             <Background/>
         </Container>

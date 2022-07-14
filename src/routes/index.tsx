@@ -1,15 +1,17 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import Route from './Route';
 import DashBoard from '../pages/DashBoard';
 import SignIn from '../pages/Signin';
 import SignUp from '../pages/SignUp';
 
 const Rotas: React.FC = () => (
-    <Routes>
-        <Route path='/*' element={<SignIn/>}/>
-        <Route path='/signup' element={<SignUp/>}/>
-        <Route path='/dashboard' element={<DashBoard/>}/>
-    </Routes>
+    <Switch>
+        <Route path='/' exact component={SignIn}/>
+        <Route path='/signup' component={SignUp}/>
+
+        <Route path='/dashboard' component={DashBoard} isPrivate/>
+    </Switch>
 );
 
 export default Rotas;

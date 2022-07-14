@@ -1,19 +1,20 @@
 import React from 'react';
 
 import GlobalStyle from './pages/styles/global';
-import { AuthProvider } from './hooks/AuthContext';
+import { AuthProvider } from './hooks/auth';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Rotas from './routes';
-import ToastContainer from './components/ToastContainer';
+import AppProvider from './hooks';
 const App: React.FC = () => {
   return (
     <>
       <Router>
-        <AuthProvider>
-        <Rotas/>
-        </AuthProvider>
-        <ToastContainer/>
-        <GlobalStyle/>
+        <AppProvider>
+          <AuthProvider>
+          <Rotas/>
+          </AuthProvider>
+          <GlobalStyle/>
+        </AppProvider>
       </Router>
     </>
   );
