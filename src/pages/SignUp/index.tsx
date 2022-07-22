@@ -1,6 +1,6 @@
-import React, {useCallback, useRef, useContext} from 'react';
+import React, {useCallback, useRef} from 'react';
 import { Container, Content, Background, AnimationContainer } from './styles';
-import logoImg from '../../assets/logo-senac.png';
+// import logoImg from '../../assets/logo-senac.png';
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 
 import { Form } from '@unform/web';
@@ -8,8 +8,8 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { useAuth } from '../../hooks/auth';
-import { Link, useHistory } from 'react-router-dom';
+// import { useAuth } from '../../hooks/auth';
+import { Link } from 'react-router-dom';
 import { useToast } from '../../hooks/toast';
 import api from '../../services/api';
 
@@ -21,7 +21,7 @@ interface SignUpFormData {
 const SignUp: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const { addToast } = useToast();
-    const history = useHistory();
+    // const history = useHistory();
     
     const handleSubmit = useCallback(async (data: SignUpFormData) => {
         console.log(data);
@@ -42,7 +42,9 @@ const SignUp: React.FC = () => {
           });
 
           await api.post('api/salvarUsuario', data);
+          
 
+          formRef.current?.reset();
           // history.push('/');
 
           addToast({
@@ -65,9 +67,9 @@ const SignUp: React.FC = () => {
         <Background/>
             <Content>
               <AnimationContainer>
-                <img src={logoImg} alt='Logo senac' />
+                {/* <img src={logoImg} alt='Logo senac' /> */}
                 
-                <Form onSubmit={handleSubmit}>
+                <Form ref={formRef} onSubmit={handleSubmit}>
                     <h1>Faça seu cadastro</h1>
 
                     <Input name = 'nome' icon={FiUser} type='name' placeholder='Nome' />

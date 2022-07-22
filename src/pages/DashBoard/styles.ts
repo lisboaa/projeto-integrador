@@ -70,6 +70,15 @@ export const Schedule = styled.div`
     flex: 1;
     margin-right: 120px;
 
+    button {
+        width: 200px;
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    }
+
     h1 {
         font-size: 36px;
     }
@@ -92,6 +101,7 @@ export const Schedule = styled.div`
             margin: 0 8px;
         }
     }
+    
 `;
 
 export const NextAppointment = styled.div`

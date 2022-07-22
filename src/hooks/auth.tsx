@@ -2,7 +2,7 @@ import  React, { createContext,useCallback, useContext, useState } from 'react';
 import api from '../services/api';
 
 interface AuthState {
-    email: string;
+    email?: string;
     instrutor: object;
 }
 
@@ -23,8 +23,8 @@ interface Prop {
 }
 
 interface AuthContextData {
-    instrutor: object;
-    signIn(creadential: SignInCredentials): Promise<void>; 
+    // instrutor: object;
+    signIn(credentials: SignInCredentials): Promise<void>; 
     signOut(): void;
 }
 
@@ -37,14 +37,19 @@ const AuthProvider: React.FC<Prop> = ({ children }) => {
         const email = localStorage.getItem('@Senac:email');
         const instrutor = localStorage.getItem('@Senac:instrutor');
 
-        if(email && instrutor) {
-            return {email, instrutor: JSON.parse(instrutor)}
+        console.log("buscarndo os valores localstorage " + email + instrutor);
+        
+        if(instrutor) {
+            console.log("etrando no parse do instrutor");
+            
+            return {instrutor: JSON.parse(instrutor)}
         }
 
         return {} as AuthState;
     });
 
     const signIn = useCallback(async ({ email, senha }:SignInCredentials) => {
+
         const response = await api.post('api/v2/login', {
             email,
             senha
@@ -58,7 +63,6 @@ const AuthProvider: React.FC<Prop> = ({ children }) => {
 
         console.log(response.status);
         
-
         setData({ email, instrutor })
         
     }, []);
@@ -67,11 +71,11 @@ const AuthProvider: React.FC<Prop> = ({ children }) => {
         localStorage.removeItem('@Senac:email');
         localStorage.removeItem('@Senac:instrutor');
 
-        setData({} as AuthState)
+        // setData({} as AuthState)
     },[]);
 
     return(
-        <AuthContext.Provider value={{ instrutor: data, signIn, signOut }}>
+        <AuthContext.Provider value={{ signIn, signOut }}>
             {children}
         </AuthContext.Provider>
     );
@@ -79,7 +83,8 @@ const AuthProvider: React.FC<Prop> = ({ children }) => {
 
 function useAuth(): AuthContextData {
     const context = useContext(AuthContext);
-
+     console.log("retornando o context " + context);
+     
     if(!context) {
         throw new Error('useAuth must be userd within a AuthProvider');
     }
